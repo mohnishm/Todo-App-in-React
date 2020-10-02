@@ -1,6 +1,9 @@
-.App {
-  text-align: center;
-  display: flex;
-  justify-content: space-evenly;
+body {
+  background: skyblue;
 }
-
+.App {
+  margin: 5vh 0 0 5vh;
+}
+button {
+  margin: 0 0 0 1vh;
+}
