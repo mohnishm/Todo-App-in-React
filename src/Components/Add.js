@@ -5,7 +5,9 @@ const Add = ({addItem}) => {
     let input;
     return (
     <form onSubmit={(e) => {e.preventDefault();
-      addItem(input.value)
+      if(input.value){
+        addItem(input.value)
+      }
       input.value = ''
     }}>
       <input type="search" placeholder="Add something..." ref={(node) => {  

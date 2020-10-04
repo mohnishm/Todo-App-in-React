@@ -19,8 +19,8 @@ export default class App extends React.Component{
   }
   
   handleRemove(id){
-    const remainder = this.state.list.filter((item) => 
-      item.id !== id
+    const remainder = this.state.list.filter((_, i) => 
+      i !== id
     );
     
     this.setState({list: remainder});
