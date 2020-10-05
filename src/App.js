@@ -8,32 +8,36 @@ import Title from './Components/Title';
 export default class App extends React.Component{
   constructor(props){
     super(props);
-    this.state = {list:[]}
-    this.addItem = this.addItem.bind(this)
-    this.handleRemove = this.handleRemove.bind(this)
+    this.state = {list:[], counter : 0};
+    this.addItem = this.addItem.bind(this);
+    this.handleDone = this.handleDone.bind(this);
   }
 
   addItem(val) {
-    let updated = [...this.state.list, val];
-    this.setState({ list: updated });
+    let obj = {id: this.state.counter, data:val, done: false};
+    let updated = [...this.state.list, obj];
+    let increment = this.state.counter + 1;
+    this.setState({ list: updated, counter: increment });
   }
   
-  handleRemove(id){
-    const remainder = this.state.list.filter((_, i) => 
-      i !== id
-    );
-    
-    this.setState({list: remainder});
+  handleDone(item){
+    let updated = this.state.list;
+    updated.forEach(task => {
+      if(task.id === item.id ){
+        task.done = true;
+      }
+    });
+    let decrement = this.state.counter - 1;
+    this.setState({list: updated, counter: decrement});
   }
 
   render(){
     return (
-    <div className="App">
-      <Title itemCount={this.state.list.length}></Title>
-      <Add addItem={this.addItem}></Add>
-      <Items items={this.state.list} remove={this.handleRemove}></Items>
-    </div>
-  );
+      <div className="App">
+        <Title itemCount={this.state.counter}></Title>
+        <Add addItem={this.addItem}></Add>
+        <Items items={this.state.list} handleDone={this.handleDone}></Items>
+      </div>
+    );
   }
-  
 }
