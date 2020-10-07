@@ -3,15 +3,15 @@ import React from 'react';
 const Items = ({items, handleDone}) => {
 
     const taskDone = (item, index) => (
-        <li key={index}>
+        <li className="panel-block has-background-light" key={index}>
             <s>{item.data}</s>
         </li>
     );
 
     const taskNotDone = (item, index) => (
-        <li key={index}>
+        <li className="panel-block has-background-white" key={index}>
             {item.data}
-            <button onClick={() => handleDone(item)}>Done</button>
+            <button className="button ml-2" onClick={() => handleDone(item)}>Done</button>
         </li>
     );
 

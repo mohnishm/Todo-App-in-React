@@ -2,9 +2,7 @@ import React from 'react';
 
 const Title = (props) => {
     return(
-        <div>
-            <h1>Todo - {props.itemCount} items</h1>
-        </div>
+        <p className="panel-heading">Todo - {props.itemCount} items</p>
     );
 }
 

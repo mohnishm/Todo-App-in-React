@@ -1,18 +1,18 @@
 import React from 'react';
 import '../App.css';
+import '../App.sass';
 
 const Add = ({addItem}) => {
     let input;
     return (
-    <form onSubmit={(e) => {e.preventDefault();
+    <form className="panel-block is-flex has-background-white" onSubmit={(e) => {e.preventDefault();
       if(input.value){
-        addItem(input.value)
+        addItem(input.value);
       }
-      input.value = ''
+      input.value = '';
     }}>
-      <input type="search" placeholder="Add something..." ref={(node) => {  
-      input = node;}}></input>
-      <button type="submit">Add</button>
+      <input className="input" type="text" placeholder="Add something..." ref={(node) => {  
+      input = node;}}/>
     </form>
     );
 }
