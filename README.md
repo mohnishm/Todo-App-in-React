@@ -2,7 +2,7 @@
 
 ## Backend
 
-In terminal, go to myapp/backend and run 'npm start'.
+I'm using mongodb in this project. So you may want to configure that with the appropriate environment variable names. Once that is done, you may want to test your connection by going to myapp/backend and running 'npm start' in the terminal. That's it! You are now ready to test the api's with a service like "postman".
 
 ## Frontend
 
