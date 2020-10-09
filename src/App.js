@@ -1,4 +1,5 @@
 import React from 'react';
+import axios from 'axios';
 import './App.css';
 import './App.sass';
 import Add from './Components/Add';
@@ -7,37 +8,66 @@ import Title from './Components/Title';
 
 
 export default class App extends React.Component{
+  _isMounted = false;
+
   constructor(props){
     super(props);
-    this.state = {list:[], counter: 0, idCounter: 0};
+    this.state = {list:[], itemCounter: 0};
     this.addItem = this.addItem.bind(this);
     this.handleDone = this.handleDone.bind(this);
+    this.componentDidMount = this.componentDidMount(this);
+  }
+
+  componentDidMount() {
+    this._isMounted = true;
+
+    axios.get(`http://localhost:8000/todo/api/`)
+      .then(res => {
+        
+        if(this._isMounted){
+          const list = res.data;
+          const unDoneList = list.filter(task => task.done === false)
+          this.setState({ list: list, itemCounter: unDoneList.length });
+        }
+      });
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
+    console.log("unmounted.");
   }
 
   addItem(val) {
-    let obj = {id: this.state.idCounter, data:val, done: false};
-    let updated = [...this.state.list, obj];
-    let increment = this.state.counter + 1;
-    let idIncrement = this.state.idCounter + 1;
-    this.setState({ list: updated, counter: increment, idCounter: idIncrement });
+    axios.post('http://localhost:8000/todo/api/task/', { data: val })
+    .then(res => {
+      const itemCounter = this.state.counter + 1;
+      const updatedList = this.state.list;
+      updatedList.push({ data: val, done: false });
+      console.log(res);
+      console.log(res.data);
+      this.setState({ list: updatedList, itemCounter: itemCounter });
+    })
   }
   
   handleDone(item){
-    let updated = this.state.list;
-    updated.forEach(task => {
+    axios.post(`http://localhost:8000/todo/api/delete/${item._id}`)
+    .then(() => console.log("Item Deleted."));
+
+    let updatedList = this.state.list;
+    updatedList.forEach(task => {
       if(task.id === item.id ){
         task.done = true;
       }
-    });
-    let decrement = this.state.counter - 1;
-    this.setState({list: updated, counter: decrement});
+    });    
+    const itemCounter = this.state.itemCounter - 1;
+    this.setState({ list: updatedList, itemCounter: itemCounter });
   }
 
   render(){
     return (
       <div className="App">
       <nav className="panel is-primary light">
-        <Title itemCount={this.state.counter}></Title>
+        <Title itemCount={this.state.itemCounter}></Title>
         <Add addItem={this.addItem}></Add>
         <Items items={this.state.list} handleDone={this.handleDone}></Items>
       </nav>  
