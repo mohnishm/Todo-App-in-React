@@ -1,3 +1,14 @@
+# How To Run
+
+## Backend
+
+In terminal, go to myapp/backend and run 'npm start'.
+
+## Frontend
+
+In terminal, run 'npm start' from the root directory.
+
+## Message from the creators of CRA
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
