@@ -11,53 +11,45 @@ export default class App extends React.Component{
 
   constructor(props){
     super(props);
-    this.state = {list:[], itemCounter: 0};
+    this.state = {list:[], counter: 0};
     this.addItem = this.addItem.bind(this);
     this.handleDone = this.handleDone.bind(this);
   }
   
   componentDidMount(){
-
     axios.get(`http://localhost:8000/todo/api/`)
       .then(res => {
           const list = res.data;
           const unDoneList = list.filter(task => task.done === false)
-          this.setState({ list: list, itemCounter: unDoneList.length });
+          this.setState({ list: list, counter: unDoneList.length });
       });
   }
 
   addItem(val) {
     axios.post('http://localhost:8000/todo/api/task/', { data: val })
     .then(res => {
-      const itemCounter = this.state.counter + 1;
-      const updatedList = this.state.list;
-      updatedList.push({ data: val, done: false });
-      console.log(res);
-      console.log(res.data);
-      this.setState({ list: updatedList, itemCounter: itemCounter });
+      let updated = [...this.state.list, res.data];
+      let increment = this.state.counter + 1;
+      this.setState({ list: updated, counter: increment });
     })
   }
   
   handleDone(item){
-    console.log(item._id)
     axios.post(`http://localhost:8000/todo/api/delete/${item._id}`)
-    .then(() => console.log("Item Deleted."));
-
-    let updatedList = this.state.list;
-    updatedList.forEach(task => {
-      if(task.id === item.id ){
-        task.done = true;
-      }
-    });    
-    const itemCounter = this.state.itemCounter - 1;
-    this.setState({ list: updatedList, itemCounter: itemCounter });
+    .then((res) => res.data);
+    let decrement = this.state.counter - 1;
+    const index = this.state.list.findIndex(task => task.id === item._id);
+    let newList = this.state.list;
+    item.done = true;
+    newList[index] = item;
+    this.setState({list: newList, counter: decrement});
   }
 
   render(){
     return (
       <div className="App">
         <nav className="panel is-primary light">
-          <Title itemCount={this.state.itemCounter}></Title>
+          <Title itemCount={this.state.counter}></Title>
           <Add addItem={this.addItem}></Add>
           <Items items={this.state.list} handleDone={this.handleDone}></Items>
         </nav>  
