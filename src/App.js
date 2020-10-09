@@ -8,33 +8,22 @@ import Title from './Components/Title';
 
 
 export default class App extends React.Component{
-  _isMounted = false;
 
   constructor(props){
     super(props);
     this.state = {list:[], itemCounter: 0};
     this.addItem = this.addItem.bind(this);
     this.handleDone = this.handleDone.bind(this);
-    this.componentDidMount = this.componentDidMount(this);
   }
-
-  componentDidMount() {
-    this._isMounted = true;
+  
+  componentDidMount(){
 
     axios.get(`http://localhost:8000/todo/api/`)
       .then(res => {
-        
-        if(this._isMounted){
           const list = res.data;
           const unDoneList = list.filter(task => task.done === false)
           this.setState({ list: list, itemCounter: unDoneList.length });
-        }
       });
-  }
-
-  componentWillUnmount() {
-    this._isMounted = false;
-    console.log("unmounted.");
   }
 
   addItem(val) {
@@ -50,6 +39,7 @@ export default class App extends React.Component{
   }
   
   handleDone(item){
+    console.log(item._id)
     axios.post(`http://localhost:8000/todo/api/delete/${item._id}`)
     .then(() => console.log("Item Deleted."));
 
@@ -66,11 +56,11 @@ export default class App extends React.Component{
   render(){
     return (
       <div className="App">
-      <nav className="panel is-primary light">
-        <Title itemCount={this.state.itemCounter}></Title>
-        <Add addItem={this.addItem}></Add>
-        <Items items={this.state.list} handleDone={this.handleDone}></Items>
-      </nav>  
+        <nav className="panel is-primary light">
+          <Title itemCount={this.state.itemCounter}></Title>
+          <Add addItem={this.addItem}></Add>
+          <Items items={this.state.list} handleDone={this.handleDone}></Items>
+        </nav>  
       </div>
     );
   }
