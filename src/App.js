@@ -38,11 +38,13 @@ export default class App extends React.Component{
     axios.post(`http://localhost:8000/todo/api/delete/${item._id}`)
     .then((res) => res.data);
     let decrement = this.state.counter - 1;
-    const index = this.state.list.findIndex(task => task.id === item._id);
-    let newList = this.state.list;
-    item.done = true;
-    newList[index] = item;
-    this.setState({list: newList, counter: decrement});
+    let updatedList = this.state.list.map(task => {
+      if(task._id === item._id) {
+        task.done = true;
+      }
+      return task;
+    });
+    this.setState({list: updatedList, counter: decrement});
   }
 
   render(){
